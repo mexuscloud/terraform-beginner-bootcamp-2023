@@ -174,3 +174,64 @@ if it is succesful you should see a json payload return that looks like this:
 }
 ```
 we will need to generate AWS CLI credentials from IAM user in order to the use AWS CLI. 
+
+## Terraform Basics 
+
+### Terraform Registry 
+
+Terraform sources their providers and modules from the Terraform Registry which is located at 
+[registry.terraform.io](https://registry.terraform.io/)
+
+- **Providers** are an interface to APIs that will allow to create resources in Terraform. 
+- **Modules** are a way to make large amounts of terraform code modular, portable and sharable. 
+
+[Randome Terraform Provider](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/string)
+
+### Terraform Console 
+
+We can see a list of all terraform commands by simply typing `terraform` in the console. 
+
+#### Terraform Init
+
+At the start of a new terraform project we will run `terraform init ` to downlaod the binaries for the terraform providers that we will use in this project. 
+
+#### Terraform Plan 
+
+`terraform plan`
+
+Is a command in the Terraform infrastructure tool that examines the configuration files and existing infrastructure to create a detailed execution plan. It will generate a changeset about the state of our Infrastructure and what will be changed. 
+
+We can outout this changeset i.e "plan" to be passed to an apply, but often you can just ignore outputting. 
+
+#### Terrraform Apply 
+
+`terraform apply`
+
+Is a command in the Terraform infrastructure tool that executes the changes defined in your configuration files, applying them to your infrastructure. This will run a plan and pass the changeset to be executed by Terraform. Apply should prompt yes or no.
+
+If we want to automatically approve an apply, we can provide the auto approve flag. 
+eg. `terraform apply --auto-approve` 
+
+#### Terraform Lock File 
+
+Is a file used to coordinate and prevent concurrent modifications to the same infrastructure. It helps ensure that only one person or process can make changes to the infrastructure at a time, preventing conflicts and data corruption in multi-user or multi-environment scenarios.
+
+`.terraform.loc.hcl` contains the locked versioning for the providers or modules that should be used with the project. 
+
+The Terraform Lock File **Should Be Commited** to your version control system (VCS) eg. Github
+
+#### Terraform State Files 
+
+Terraform State Files are essential records that store the current state of your infrastructure as managed by Terraform. They contain information about the resources Terraform manages, their attributes, and their relationships. These files enable Terraform to track and manage changes to your infrastructure, plan updates, and perform actions like applying or destroying resources accurately. Properly managing and securing state files is crucial for effective Terraform workflows.
+
+`.terraform.tfstate` contains information about the current state of your infrastructure. 
+
+This file **Should Not Be Commited** to your VCS.
+This file contains sensetive data. 
+If you lose this file, you lose the knowing the state of your infrastructure. 
+
+`.terraform.tfstate.backup` is the previous state file state. 
+
+#### Terraform Directory 
+
+`.terraform` directory contains binaries of terraform providers. 
