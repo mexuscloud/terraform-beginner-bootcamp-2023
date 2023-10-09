@@ -212,6 +212,15 @@ Is a command in the Terraform infrastructure tool that executes the changes defi
 If we want to automatically approve an apply, we can provide the auto approve flag. 
 eg. `terraform apply --auto-approve` 
 
+####  Terraform Destroy 
+
+`terraform destroy`
+This will destroy resources. 
+
+You can also use the auto approve flag to skip the appove prompt. 
+eg. `terraform destroy --auto-approve`
+
+
 #### Terraform Lock File 
 
 Is a file used to coordinate and prevent concurrent modifications to the same infrastructure. It helps ensure that only one person or process can make changes to the infrastructure at a time, preventing conflicts and data corruption in multi-user or multi-environment scenarios.
