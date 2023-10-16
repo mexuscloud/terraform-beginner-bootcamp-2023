@@ -66,3 +66,23 @@ The order of Terraform variables is critical for variable definition and usage. 
 - **Input Values**: You can provide variable values via command-line flags, variable files, or environment variables to override defaults.
 - **Variable Precedence**: Terraform follows a hierarchy for variable values, with command-line values taking precedence over defaults, and environment variables taking precedence over variable files.
 
+
+## Dealing with configuration Drift 
+
+## What happens if we lose our state file?
+
+If you lose your state file, you most likely have to tear down all your cloud infrastructure manually. 
+
+You can use terraform import but it won't work for all cloud resources. You will need to check the terraform providers documentation for which resources support import.
+
+### Fix Missing Resources with Terraform Import 
+
+`terraform import aws_s3_bucket.bucket bucket-name`
+
+[Terraform Import](https://developer.hashicorp.com/terraform/cli/import)
+
+[AWS S3 Bucket Import](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket#import)
+
+### Fix Manual Configuration 
+
+If someone goes and delete or modify resources manually through ClickOps, running Terraform plan will attempt to put our infrastructure back into the expected state fixing configuration drift.  
