@@ -1,10 +1,10 @@
 terraform {
-  # cloud {
-  #   organization = "mexuscloud"
-  #   workspaces {
-  #     name = "Terra-house-1"
-  #   }
-  # }
+  cloud {
+    organization = "mexuscloud"
+    workspaces {
+      name = "terraform-cloud"
+    }
+  }
 }
 
 module "terrahouse_aws" {
