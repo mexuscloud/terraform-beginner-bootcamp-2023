@@ -18,22 +18,22 @@ variable "bucket_name" {
   }
 }
 
-variable "index_html_filepath" {
-  type        = string
-  description = "Local file path to the 'index.html' file for uploading to the S3 bucket."
+# variable "index_html_filepath" {
+#   type        = string
+#   description = "Local file path to the 'index.html' file for uploading to the S3 bucket."
 
-  validation {
-    condition = can(file(var.index_html_filepath))
-    error_message = "The specified file '${var.index_html_filepath}' does not exist or is not accessible."
-  }
-}
+#   validation {
+#     condition = can(file(var.index_html_filepath))
+#     error_message = "The specified file '${var.index_html_filepath}' does not exist or is not accessible."
+#   }
+# }
 
-variable "error_html_filepath" {
-  type        = string
-  description = "Local file path to the 'error.html' file for uploading to the S3 bucket."
+# variable "error_html_filepath" {
+#   type        = string
+#   description = "Local file path to the 'error.html' file for uploading to the S3 bucket."
 
-  validation {
-    condition = can(file(var.error_html_filepath))
-    error_message = "The specified file '${var.error_html_filepath}' does not exist or is not accessible."
-  }
-}
+#   validation {
+#     condition = can(file(var.error_html_filepath))
+#     error_message = "The specified file '${var.error_html_filepath}' does not exist or is not accessible."
+#   }
+# }
