@@ -129,35 +129,32 @@ func Resource() *schema.Resource  {
 }
 
 func resourceHouseCreate(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-
 	log.Print("resourceHouseCreate:start")
 	var diags diag.Diagnostics
 
 	config := m.(*Config)
 
 	payload := map[string]interface{}{
-		"name":            d.Get("name").(string),
-		"description":     d.Get("description").(string),
-		"domain_name":     d.Get("domain_name").(string),
-		"town":            d.Get("town").(string),
+		"name": d.Get("name").(string),
+		"description": d.Get("description").(string),
+		"domain_name": d.Get("domain_name").(string),
+		"town": d.Get("town").(string),
 		"content_version": d.Get("content_version").(int),
 	}
-
 	payloadBytes, err := json.Marshal(payload)
 	if err != nil {
 		return diag.FromErr(err)
 	}
 
-	// construct the HTTP request 
-	url := config.Endpoint+"/u/"+config.userUuid+"/homes"
-	log.Print("URL: "+url)
-	
+	url :=  config.Endpoint+"/u/"+config.userUuid+"/homes"
+	log.Print("URL: "+ url)
+	// Construct the HTTP Request
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(payloadBytes))
 	if err != nil {
 		return diag.FromErr(err)
 	}
 
-	// set header
+	// Set Headers
 	req.Header.Set("Authorization", "Bearer "+config.Token)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Accept", "application/json")
@@ -169,23 +166,23 @@ func resourceHouseCreate(ctx context.Context, d *schema.ResourceData, m interfac
 	}
 	defer resp.Body.Close()
 
-	// Parse response json
+	// parse response JSON
 	var responseData map[string]interface{}
-	if err := json.NewDecoder(resp.Body).Decode(&responseData); err != nil {
+	if err := json.NewDecoder(resp.Body).Decode(&responseData);  err != nil {
 		return diag.FromErr(err)
 	}
 
-	// status OK = 200 HTTP response code 
+	// StatusOK = 200 HTTP Response Code
 	if resp.StatusCode != http.StatusOK {
-		return diag.FromErr(fmt.Errorf("Failed to create home resource, status_code: %d, status: %s, body %s", resp.StatusCode, resp.Status, responseData))
+		return diag.FromErr(fmt.Errorf("failed to create home resource, status_code: %d, status: %s, body %s", resp.StatusCode, resp.Status, responseData))
 	}
 
-	// handle response status 
-
-	log.Print("resourceHouseCreate:end")
+	// handle response status
 
 	homeUUID := responseData["uuid"].(string)
 	d.SetId(homeUUID)
+
+	log.Print("resourceHouseCreate:end")
 
 	return diags
 }
@@ -232,7 +229,7 @@ func resourceHouseRead(ctx context.Context, d *schema.ResourceData, m interface{
 		d.Set("domain_name", responseData["domain_name"].(string))
 		d.Set("town", responseData["town"].(string))
 		d.Set("content_version", responseData["content_version"].(float64))
-	} else if resp.StatusCode != http.StatusNotFound {
+	} else if resp.StatusCode == http.StatusNotFound {
 		d.SetId("")
 	} else if resp.StatusCode != http.StatusOK  {
 		return diag.FromErr(fmt.Errorf("Failed to read home resource, status_code: %d, status: %s, body %s", resp.StatusCode, resp.Status, responseData))
@@ -285,10 +282,21 @@ func resourceHouseUpdate(ctx context.Context, d *schema.ResourceData, m interfac
 	}
 	defer resp.Body.Close()
 
+	// parse response JSON
+	var responseData map[string]interface{}
+	if err := json.NewDecoder(resp.Body).Decode(&responseData);  err != nil {
+		return diag.FromErr(err)
+	}
+
 	// status OK = 200 HTTP response code 
 	if resp.StatusCode != http.StatusOK {
-		return diag.FromErr(fmt.Errorf("Failed to update home resource, status_code: %d, status: %s", resp.StatusCode, resp.Status))
+		return diag.FromErr(fmt.Errorf("failed to update home resource, status_code: %d, status: %s, body %s", resp.StatusCode, resp.Status, responseData))
 	}
+
+	// // status OK = 200 HTTP response code 
+	// if resp.StatusCode != http.StatusOK {
+	// 	return diag.FromErr(fmt.Errorf("Failed to update home resource, status_code: %d, status: %s", resp.StatusCode, resp.Status))
+	// }
 
 	log.Print("resourceHouseUpdate:end")
 
